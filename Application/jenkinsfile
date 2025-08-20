@@ -6,7 +6,7 @@
         stage('Checkout Code') {
             steps {
                 echo 'scm git'
-                git branch: 'main', url: 'https://github.com/devopstraininghub/REALTIMEPROJECT.git'
+                git branch: 'main', url: 'https://github.com/pragadasathya/project.git'
             }
         }
     	
@@ -25,22 +25,22 @@
                 echo 'scanning project'
                 sh 'ls -ltr'
                 sh '''cd Application && mvn sonar:sonar \\
-                      -Dsonar.host.url=http://3.88.43.182:9000 \\
-                      -Dsonar.login=squ_f7d38d9efecde942052011718376e7479ae66764'''
+                      -Dsonar.host.url=http://13.220.133.244:9000 \\
+                      -Dsonar.login=squ_744fdf6867429119c760acf0644415907cd1fa65'''
             }
     	}
        stage('Build docker image'){
             steps{
                 script{
                     echo 'docker image build'
-					sh 'cd Application && docker build -t devopshubg333/k8s:${BUILD_NUMBER} .'
+		    sh 'cd Application && docker build -t sathya240/cicd:${BUILD_NUMBER} .'
                 }
             }
         }
 		
        stage('docker image scan'){
         steps{
-            sh "trivy image devopshubg333/k8s:${BUILD_NUMBER}"
+            sh "trivy image sathya240/cicd:${BUILD_NUMBER}"
         }
     }		
  
@@ -49,36 +49,35 @@
             steps{
                 script{
                    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
-                   sh 'docker login -u devopshubg333 -p ${dockerhub}'
+                   sh 'docker login -u sathya240 -p ${dockerhub}'
 
               }
-                   sh 'docker push devopshubg333/k8s:${BUILD_NUMBER}'
+                   sh 'docker push sathya240/cicd:${BUILD_NUMBER}'
                 }
             }
         }
 		
       stage('Update kubernetes Deployment manifest File') {
         environment {
-            GIT_REPO_NAME = "REALTIMEPROJECT"
-            GIT_USER_NAME = "devopstraininghub"
+            GIT_REPO_NAME = "project"
+            GIT_USER_NAME = "pragadasathya"
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "madhu@gmail.com"
-                    git config user.name "madhu"
+                    git config user.email "pragadasathya566@gmail.com"
+	            git config user.name "pragadasathya"
                     BUILD_NUMBER=${BUILD_NUMBER}
                   
                     sed -i "s/k8s:.*/k8s:${BUILD_NUMBER}/g" Ansible/k8s_deployment.yaml
                     git add .
                     git commit -m "Update deployment image tag to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git main
                 '''
             }
         }
     }
-
-    stage('k8s Deployment using ansible'){
+      stage('k8s Deployment using ansible'){
             steps{
               
                     script{
@@ -87,5 +86,5 @@
                 }
             }
         }
-}
+    }
 }
