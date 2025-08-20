@@ -2,5 +2,5 @@ projectKey=orbartal:my_app
 serverUrl=http://13.220.133.244:9000
 serverVersion=25.8.0.112029
 dashboardUrl=http://13.220.133.244:9000/dashboard?id=orbartal%3Amy_app
-ceTaskId=494c055f-f343-4c4e-9984-3e89ba02b2bb
-ceTaskUrl=http://13.220.133.244:9000/api/ce/task?id=494c055f-f343-4c4e-9984-3e89ba02b2bb
+ceTaskId=45b7ad4a-8514-4af9-a6c2-2c01fff5b0da
+ceTaskUrl=http://13.220.133.244:9000/api/ce/task?id=45b7ad4a-8514-4af9-a6c2-2c01fff5b0da
