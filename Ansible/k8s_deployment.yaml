@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: my-app
-        image: sathya240/cicd:3
+        image: sathya240/cicd:11
         ports:
         - containerPort: 8080
 ---
@@ -33,4 +33,5 @@ spec:
     protocol: TCP
   selector:
     app: my-app
+
 
